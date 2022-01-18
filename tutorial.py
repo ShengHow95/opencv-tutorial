@@ -80,13 +80,13 @@ import matplotlib.pyplot as plt
 
 # Translate Image
 # def translate(img, x, y):
-  # -x: Left
-  # -y: Up
-  # x: Right
-  # y: Down
-  # transMat = np.float32([[1,0,x],[0,1,y]])
-  # dimensions = (img.shape[1], img.shape[0])
-  # return cv2.warpAffine(img, transMat, dimensions)
+# -x: Left
+# -y: Up
+# x: Right
+# y: Down
+# transMat = np.float32([[1,0,x],[0,1,y]])
+# dimensions = (img.shape[1], img.shape[0])
+# return cv2.warpAffine(img, transMat, dimensions)
 
 # def rotate(img, angle, rotPoint=None):
 #   (height, width) = (img.shape[1], img.shape[0])

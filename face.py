@@ -9,10 +9,11 @@ import numpy as np
 
 # haarCascade = cv2.CascadeClassifier('haar_face.xml')
 
-# facesRect = haarCascade.detectMultiScale(grayImg, scaleFactor=1.1, minNeighbors=1)
+# facesRect = haarCascade.detectMultiScale(
+#     grayImg, scaleFactor=1.1, minNeighbors=1)
 
-# for x,y,w,h in facesRect:
-#   cv2.rectangle(img, (x,y), (x+w, y+h), (0,255,0), thickness=3)
+# for x, y, w, h in facesRect:
+#     cv2.rectangle(img, (x, y), (x+w, y+h), (0, 255, 0), thickness=3)
 
 # cv2.imshow('img', img)
 
@@ -21,31 +22,35 @@ import numpy as np
 
 # ------------------------------------------------ #
 
-people = ['Ben Afflek', 'Elton John', 'Jerry Seinfield', 'Madonna', 'Mindy Kaling']
-dir = 'Faces/train'
+people = ['Ben Afflek', 'Elton John',
+          'Jerry Seinfield', 'Madonna', 'Mindy Kaling']
+directory = 'Faces/train'
 
 haarCascade = cv2.CascadeClassifier('haar_face.xml')
 
 features = []
 labels = []
 
+
 def train():
-  for person in people:
-    path = os.path.join(dir, person)
-    label = people.index(person)
+    for person in people:
+        path = os.path.join(directory, person)
+        label = people.index(person)
 
-    for img in os.listdir(path):
-      imgPath = os.path.join(path, img)
-      
-      imgArray = cv2.imread(imgPath)
-      grayImg = cv2.cvtColor(imgArray, cv2.COLOR_BGR2GRAY)
+        for img in os.listdir(path):
+            imgPath = os.path.join(path, img)
 
-      facesRect = haarCascade.detectMultiScale(grayImg, scaleFactor=1.1, minNeighbors=4)
-      for x,y,w,h in facesRect:
-        facesROI = grayImg[y:y+h, x:x+w]
-        features.append(facesROI)
-        labels.append(label)
-  
+            imgArray = cv2.imread(imgPath)
+            grayImg = cv2.cvtColor(imgArray, cv2.COLOR_BGR2GRAY)
+
+            facesRect = haarCascade.detectMultiScale(
+                grayImg, scaleFactor=1.1, minNeighbors=4)
+            for x, y, w, h in facesRect:
+                facesROI = grayImg[y:y+h, x:x+w]
+                features.append(facesROI)
+                labels.append(label)
+
+
 train()
 
 features = np.array(features)
@@ -65,15 +70,17 @@ faceRecognizer.save('faceTrained.yml')
 testImg = cv2.imread('Faces/val/madonna/3.jpg')
 grayTestImg = cv2.cvtColor(testImg, cv2.COLOR_BGR2GRAY)
 
-facesRect = haarCascade.detectMultiScale(grayTestImg, scaleFactor=1.1, minNeighbors=1)
-for x,y,w,h in facesRect:
-  facesROI = grayTestImg[y:y+h, x:x+w]
+facesRect = haarCascade.detectMultiScale(
+    grayTestImg, scaleFactor=1.1, minNeighbors=1)
+for x, y, w, h in facesRect:
+    facesROI = grayTestImg[y:y+h, x:x+w]
 
-  label, confidence = faceRecognizer.predict(facesROI)
-  print(people[label], confidence)
+    label, confidence = faceRecognizer.predict(facesROI)
+    print(people[label], confidence)
 
-  cv2.rectangle(testImg, (x,y), (x+w, y+h), (0,255,0), thickness=3)
-  cv2.putText(testImg, str(people[label]), (0,0), cv2.FONT_HERSHEY_COMPLEX, 1.0, (0,255,0), 2)
+    cv2.rectangle(testImg, (x, y), (x+w, y+h), (0, 255, 0), thickness=3)
+    cv2.putText(testImg, str(people[label]), (0, 0),
+                cv2.FONT_HERSHEY_COMPLEX, 1.0, (0, 255, 0), 2)
 
 cv2.imshow('testImg', testImg)
 cv2.waitKey(0)
